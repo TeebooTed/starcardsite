@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>STAR Company Cards | The Definitive Resource</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Space+Grotesk:wght@500;600;700&display=swap');
+    body { font-family: 'Inter', system-ui, sans-serif; }
+    .logo-font { font-family: 'Space Grotesk', sans-serif; }
+    .neon-amber { text-shadow: 0 0 20px #FFB300, 0 0 40px #FFB300; }
+    .glass { background: rgba(10, 10, 10, 0.85); backdrop-filter: blur(16px); }
+    .card-hover { transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1); }
+    .card-hover:hover { transform: scale(1.06) rotate(1deg); box-shadow: 0 0 60px -10px #FFB300; }
+    .drawer { transform: translateX(100%); transition: transform 0.4s cubic-bezier(0.32, 0.72, 0, 1); }
+    .drawer.open { transform: translateX(0); }
+  </style>
+</head>
+<body class="bg-[#0A0A0A] text-zinc-100">
+
+  <!-- NAVBAR -->
+  <nav class="fixed top-0 left-0 right-0 z-50 glass border-b border-amber-400/30">
+    <div class="max-w-7xl mx-auto px-6 py-5 flex items-center justify-between">
+      <div class="flex items-center gap-3">
+        <span class="text-4xl">★</span>
+        <div class="logo-font text-3xl font-semibold tracking-tighter neon-amber">STAR</div>
+        <div class="text-xs uppercase tracking-[3px] text-amber-400/70 pt-1">COMPANY CARDS</div>
+      </div>
+      <div class="hidden md:flex items-center gap-8 text-sm uppercase tracking-widest font-medium">
+        <a href="index.html" class="text-amber-400 font-semibold border-b-2 border-amber-400 pb-1">Home</a>
+        <a href="#" class="hover:text-amber-400 transition">History</a>
+        <a href="#" class="hover:text-amber-400 transition">Basketball</a>
+        <a href="baseball.html" class="hover:text-amber-400 transition">Baseball</a>
+        <a href="#" class="hover:text-amber-400 transition">Guides</a>
+        <a href="#" class="hover:text-amber-400 transition">Database</a>
+        <a href="#" class="hover:text-amber-400 transition">Gallery</a>
+      </div>
+      <div class="flex items-center gap-6">
+        <button onclick="toggleCollectionDrawer()" class="relative flex items-center gap-2 text-amber-400 hover:text-white transition">
+          <i class="fas fa-heart text-2xl"></i>
+          <span id="collection-count" class="absolute -top-1 -right-1 bg-amber-400 text-black text-[10px] font-bold min-w-[18px] h-4 flex items-center justify-center rounded-full px-1">0</span>
+        </button>
+        <a href="#" target="_blank" class="bg-amber-400 hover:bg-amber-500 text-black font-semibold px-6 py-2.5 rounded-full text-sm tracking-widest transition flex items-center gap-2">
+          <i class="fas fa-download"></i> Full Guide
+        </a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <section class="min-h-screen bg-[linear-gradient(rgba(0,0,0,0.85),rgba(0,0,0,0.9)),url('https://i.postimg.cc/3xKqY3qL/star-mj-hero.jpg')] bg-cover bg-center flex items-center">
+    <div class="max-w-5xl mx-auto px-6 text-center pt-20">
+      <div class="inline-flex items-center gap-3 bg-black/60 px-6 py-2 rounded-full border border-amber-400/50 mb-6">
+        <span class="text-2xl">★</span>
+        <span class="uppercase text-xs tracking-[3px] text-amber-400">1983–1996 • The Definitive Resource</span>
+      </div>
+      <h1 class="text-7xl md:text-8xl font-bold logo-font tracking-tighter neon-amber">STAR COMPANY CARDS</h1>
+      <p class="text-3xl text-amber-300 mt-2">Built by Matthew Nielsen • From the Official Resource Guide</p>
+      <p class="max-w-xl mx-auto mt-8 text-lg text-zinc-400">The most complete guide to authentic Star cards. Track your collection, spot fakes, and explore every set ever printed.</p>
+      <a href="#featured" class="mt-12 inline-block bg-amber-400 hover:bg-white text-black font-semibold px-10 py-5 rounded-2xl text-lg transition">Explore the Collection →</a>
+    </div>
+  </section>
+
+  <!-- FEATURED CARDS -->
+  <section id="featured" class="py-24">
+    <div class="max-w-7xl mx-auto px-6">
+      <h2 class="text-5xl font-bold logo-font tracking-tighter mb-12">Featured Star Cards</h2>
+      <div class="grid md:grid-cols-3 gap-8">
+        <!-- MJ -->
+        <div class="group bg-zinc-900 rounded-3xl overflow-hidden card-hover">
+          <div class="aspect-[2/3] relative">
+            <img src="https://i.postimg.cc/3xKqY3qL/star-mj-1985.jpg" alt="1985 Michael Jordan" class="w-full h-full object-cover">
+          </div>
+          <div class="p-6 flex justify-between items-end">
+            <div>
+              <div class="font-semibold text-xl">Michael Jordan</div>
+              <div class="text-amber-400 text-sm">1985 Rookie • Chicago Bulls</div>
+            </div>
+            <button onclick="addToCollection(event, {id:'mj1', name:'Michael Jordan', year:'1985', image:'https://i.postimg.cc/3xKqY3qL/star-mj-1985.jpg'})" class="text-3xl text-amber-400 hover:scale-125 transition">❤️</button>
+          </div>
+        </div>
+        <!-- Stockton -->
+        <div class="group bg-zinc-900 rounded-3xl overflow-hidden card-hover">
+          <div class="aspect-[2/3] relative">
+            <img src="https://i.postimg.cc/3xKqY3qL/star-stockton-1984.jpg" alt="1984 John Stockton" class="w-full h-full object-cover">
+          </div>
+          <div class="p-6 flex justify-between items-end">
+            <div>
+              <div class="font-semibold text-xl">John Stockton</div>
+              <div class="text-amber-400 text-sm">1984 • Utah Jazz</div>
+            </div>
+            <button onclick="addToCollection(event, {id:'st1', name:'John Stockton', year:'1984', image:'https://i.postimg.cc/3xKqY3qL/star-stockton-1984.jpg'})" class="text-3xl text-amber-400 hover:scale-125 transition">❤️</button>
+          </div>
+        </div>
+        <!-- Ripken -->
+        <div class="group bg-zinc-900 rounded-3xl overflow-hidden card-hover">
+          <div class="aspect-[2/3] relative">
+            <img src="https://i.postimg.cc/3xKqY3qL/star-ripken-1989.jpg" alt="1989 Cal Ripken Jr" class="w-full h-full object-cover">
+          </div>
+          <div class="p-6 flex justify-between items-end">
+            <div>
+              <div class="font-semibold text-xl">Cal Ripken Jr.</div>
+              <div class="text-amber-400 text-sm">1989 • Baltimore Orioles</div>
+            </div>
+            <button onclick="addToCollection(event, {id:'rip1', name:'Cal Ripken Jr.', year:'1989', image:'https://i.postimg.cc/3xKqY3qL/star-ripken-1989.jpg'})" class="text-3xl text-amber-400 hover:scale-125 transition">❤️</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- COLLECTION DRAWER -->
+  <div id="collection-drawer" class="drawer fixed top-0 right-0 h-full w-96 bg-zinc-950 border-l border-amber-400/30 shadow-2xl z-[100] overflow-auto">
+    <div class="p-6 border-b border-zinc-800 flex justify-between items-center sticky top-0 bg-zinc-950">
+      <div class="text-2xl font-semibold">My Collection</div>
+      <button onclick="toggleCollectionDrawer()" class="text-3xl text-zinc-400 hover:text-white">✕</button>
+    </div>
+    <div class="p-6">
+      <div id="collection-stats" class="text-amber-400 text-sm mb-6"></div>
+      <div id="collection-grid" class="grid grid-cols-1 gap-6"></div>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <footer class="bg-black py-16 border-t border-zinc-800 text-center">
+    <div class="max-w-7xl mx-auto px-6">
+      <div class="text-amber-400 text-2xl logo-font mb-2">★ STAR COMPANY CARDS</div>
+      <p class="text-zinc-500">© 2026 Matthew Nielsen • matthew.nielsen@gmail.com</p>
+      <a href="baseball.html" class="text-amber-400 hover:underline mt-8 inline-block">→ Visit the Baseball Section</a>
+    </div>
+  </footer>
+
+  <script>
+    let collection = JSON.parse(localStorage.getItem('starCollection')) || [];
+
+    function saveCollection() {
+      localStorage.setItem('starCollection', JSON.stringify(collection));
+      updateCount();
+    }
+
+    function updateCount() {
+      document.getElementById('collection-count').textContent = collection.length;
+    }
+
+    function addToCollection(e, card) {
+      e.stopImmediatePropagation();
+      if (!collection.find(c => c.id === card.id)) {
+        collection.push(card);
+        saveCollection();
+        alert(`✅ Added ${card.name} (${card.year}) to your collection!`);
+      } else {
+        alert("Already in your collection");
+      }
+    }
+
+    function removeFromCollection(id) {
+      collection = collection.filter(c => c.id !== id);
+      saveCollection();
+      renderCollection();
+    }
+
+    function renderCollection() {
+      const grid = document.getElementById('collection-grid');
+      grid.innerHTML = '';
+      if (collection.length === 0) {
+        grid.innerHTML = `<p class="text-zinc-500 text-center py-12">Your collection is empty.<br>Add some Star cards! ❤️</p>`;
+        return;
+      }
+      collection.forEach(card => {
+        grid.innerHTML += `
+          <div class="flex gap-4 bg-zinc-900 rounded-2xl overflow-hidden">
+            <img src="${card.image}" class="w-24 h-32 object-cover">
+            <div class="py-4 flex-1">
+              <div class="font-semibold">${card.name}</div>
+              <div class="text-amber-400 text-sm">${card.year}</div>
+              <button onclick="removeFromCollection('${card.id}')" class="mt-4 text-red-400 text-sm hover:underline">Remove</button>
+            </div>
+          </div>`;
+      });
+      document.getElementById('collection-stats').innerHTML = `
+        ${collection.length} cards • ${new Set(collection.map(c => c.year)).size} years
+      `;
+    }
+
+    function toggleCollectionDrawer() {
+      const drawer = document.getElementById('collection-drawer');
+      drawer.classList.toggle('open');
+      if (drawer.classList.contains('open')) renderCollection();
+    }
+
+    // Initialize
+    updateCount();
+  </script>
+</body>
+</html>

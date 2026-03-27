@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>STAR Company Cards | Database</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Space+Grotesk:wght@500;600;700&display=swap');
+    body { font-family: 'Inter', system-ui, sans-serif; }
+    .logo-font { font-family: 'Space Grotesk', sans-serif; }
+    .neon-amber { text-shadow: 0 0 20px #FFB300, 0 0 40px #FFB300; }
+    .glass { background: rgba(10, 10, 10, 0.85); backdrop-filter: blur(16px); }
+    .drawer { transform: translateX(100%); transition: transform 0.4s cubic-bezier(0.32, 0.72, 0, 1); }
+    .drawer.open { transform: translateX(0); }
+  </style>
+</head>
+<body class="bg-[#0A0A0A] text-zinc-100">
+
+  <!-- NAVBAR -->
+  <nav class="fixed top-0 left-0 right-0 z-50 glass border-b border-amber-400/30">
+    <div class="max-w-7xl mx-auto px-6 py-5 flex items-center justify-between">
+      <div class="flex items-center gap-3">
+        <span class="text-4xl">★</span>
+        <div class="logo-font text-3xl font-semibold tracking-tighter neon-amber">STAR</div>
+        <div class="text-xs uppercase tracking-[3px] text-amber-400/70 pt-1">COMPANY CARDS</div>
+      </div>
+      <div class="hidden md:flex items-center gap-8 text-sm uppercase tracking-widest font-medium">
+        <a href="index.html" class="hover:text-amber-400 transition">Home</a>
+        <a href="baseball.html" class="hover:text-amber-400 transition">Baseball</a>
+        <a href="database.html" class="text-amber-400 font-semibold border-b-2 border-amber-400 pb-1">Database</a>
+      </div>
+      <div class="flex items-center gap-6">
+        <button onclick="toggleCollectionDrawer()" class="relative flex items-center gap-2 text-amber-400 hover:text-white transition">
+          <i class="fas fa-heart text-2xl"></i>
+          <span id="collection-count" class="absolute -top-1 -right-1 bg-amber-400 text-black text-[10px] font-bold min-w-[18px] h-4 flex items-center justify-center rounded-full px-1">0</span>
+        </button>
+        <button onclick="showAuthModal()" id="auth-button" class="flex items-center gap-2 text-sm font-medium px-5 py-2 border border-amber-400/50 rounded-2xl hover:border-amber-400">
+          <i class="fas fa-user"></i> <span id="auth-status">Sign In</span>
+        </button>
+      </div>
+    </div>
+  </nav>
+
+  <!-- AUTH MODAL -->
+  <div id="auth-modal" class="hidden fixed inset-0 bg-black/80 flex items-center justify-center z-[200]">
+    <div class="bg-zinc-900 rounded-3xl w-full max-w-md mx-4 p-8">
+      <h3 id="modal-title" class="text-2xl font-semibold mb-6">Sign In</h3>
+      <input id="email" type="email" placeholder="Email" class="w-full bg-zinc-800 border border-zinc-700 rounded-2xl px-6 py-4 mb-4">
+      <input id="password" type="password" placeholder="Password" class="w-full bg-zinc-800 border border-zinc-700 rounded-2xl px-6 py-4 mb-6">
+      <button onclick="handleAuth()" id="auth-submit" class="w-full bg-amber-400 text-black py-4 rounded-2xl font-semibold">Sign In</button>
+      <div class="text-center mt-6 text-sm text-zinc-400">
+        Don't have an account? 
+        <span onclick="toggleAuthMode()" id="switch-mode" class="text-amber-400 cursor-pointer hover:underline">Sign Up</span>
+      </div>
+      <button onclick="hideAuthModal()" class="absolute top-4 right-4 text-2xl text-zinc-400">✕</button>
+    </div>
+  </div>
+
+  <!-- Rest of your database page (tabs, table, etc.) remains the same as the previous database.html you have -->
+  <!-- ... (keep the hero, tabs, search, and table from the last database.html I gave you) ... -->
+
+  <!-- COLLECTION DRAWER (same as before) -->
+  <div id="collection-drawer" class="drawer fixed top-0 right-0 h-full w-96 bg-zinc-950 border-l border-amber-400/30 shadow-2xl z-[100] overflow-auto">
+    <!-- same drawer content as previous versions -->
+  </div>
+
+  <script>
+    // === SUPABASE SETUP - REPLACE THESE WITH YOUR OWN KEYS ===
+    const SUPABASE_URL = 'https://hjchnjdcoxpcnnerhnop.supabase.co';
+    const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhqY2huamRjb3hwY25uZXJobm9wIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQ1ODEwMTEsImV4cCI6MjA5MDE1NzAxMX0.hBLwlJRYDGYHtCWRZZIAGnctoZcdKNYLOoDydez-NzU';
+
+    const supabase = Supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+    let currentUser = null;
+    let collection = [];
+
+    // Auth functions
+    async function handleAuth() {
+      const email = document.getElementById('email').value;
+      const password = document.getElementById('password').value;
+      const isLogin = document.getElementById('modal-title').textContent === 'Sign In';
+
+      let result;
+      if (isLogin) {
+        result = await supabase.auth.signInWithPassword({ email, password });
+      } else {
+        result = await supabase.auth.signUp({ email, password });
+      }
+
+      if (result.error) {
+        alert(result.error.message);
+      } else {
+        hideAuthModal();
+        currentUser = result.data.user;
+        updateAuthUI();
+        loadUserCollection();
+      }
+    }
+
+    function toggleAuthMode() {
+      const title = document.getElementById('modal-title');
+      const btn = document.getElementById('auth-submit');
+      const switchText = document.getElementById('switch-mode');
+      if (title.textContent === 'Sign In') {
+        title.textContent = 'Sign Up';
+        btn.textContent = 'Create Account';
+        switchText.textContent = 'Sign In';
+      } else {
+        title.textContent = 'Sign In';
+        btn.textContent = 'Sign In';
+        switchText.textContent = 'Sign Up';
+      }
+    }
+
+    function showAuthModal() {
+      document.getElementById('auth-modal').classList.remove('hidden');
+    }
+
+    function hideAuthModal() {
+      document.getElementById('auth-modal').classList.add('hidden');
+    }
+
+    function updateAuthUI() {
+      const btn = document.getElementById('auth-button');
+      if (currentUser) {
+        btn.innerHTML = `<i class="fas fa-user"></i> ${currentUser.email.split('@')[0]} <span onclick="logout(event)" class="ml-3 text-xs text-red-400">(logout)</span>`;
+      } else {
+        btn.innerHTML = `<i class="fas fa-user"></i> Sign In`;
+      }
+    }
+
+    async function logout(e) {
+      e.stopImmediatePropagation();
+      await supabase.auth.signOut();
+      currentUser = null;
+      collection = [];
+      updateAuthUI();
+      updateCount();
+    }
+
+    // Load / Save collection to Supabase
+    async function loadUserCollection() {
+      if (!currentUser) return;
+      const { data } = await supabase.from('user_collections').select('card_id').eq('user_id', currentUser.id);
+      collection = data.map(row => ({ id: row.card_id, /* you can fetch full card data here if wanted */ }));
+      updateCount();
+    }
+
+    async function addToCollection(e, card) {
+      e.stopImmediatePropagation();
+      if (!currentUser) {
+        alert("Please sign in to save collections across devices");
+        showAuthModal();
+        return;
+      }
+      await supabase.from('user_collections').insert({ user_id: currentUser.id, card_id: card.id });
+      collection.push(card);
+      updateCount();
+      alert(`✅ Saved ${card.name} to your synced collection!`);
+    }
+
+    // Rest of your existing table rendering and drawer code (same as last database.html)
+    // ... (include the full table JS and drawer functions from previous version)
+
+    // Initialize on load
+    window.onload = () => {
+      supabase.auth.getSession().then(({ data: { session } }) => {
+        if (session) {
+          currentUser = session.user;
+          updateAuthUI();
+          loadUserCollection();
+        }
+      });
+      // Your existing filterCards() and table rendering code here
+    };
+  </script>
+</body>
+</html>
